@@ -2,8 +2,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 <xs:simpleType name="price">
- <xs:restriction base="xs:integer">
-  <xs:minInclusive value="0"/>
+ <xs:restriction base="xs:float">
+  <xs:minInclusive value="0.0"/>
  </xs:restriction>
 </xs:simpleType>
 
@@ -23,37 +23,42 @@
 
 <xs:simpleType name="lang">
  <xs:restriction base="xs:string">
-  <xs:length value="2">
-  </xs:length>
+  <xs:length value="2"/>
  </xs:restriction>
 </xs:simpleType>
 
 <xs:simpleType name="cover">
  <xs:restriction base="xs:string">
-  <xs:pattern value="(hardback|paperback)cover"/>
+  <xs:pattern value="(hardback|paperback)"/>
  </xs:restriction>
 </xs:simpleType>
 
-<xs:complexType name="title">
- <xs:restriction base="xs:string">
-  <xs:minLength value="2"/>
-  <xs:maxLength value="30"/>
- </xs:restriction>
- <xs:attribute name="lang" type="lang" use="required"/>
-</xs:complexType>
+<xs:simpleType name="titleType">
+	<xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+</xs:simpleType>
+  
 
 <xs:complexType name="bookstore">
  <xs:sequence>
-  <xs:element name="book" type="book"/>
+  <xs:element name="book" type="book" maxOccurs="30" minOccurs="1"/>
  </xs:sequence>
 </xs:complexType>
 
 <xs:complexType name="book">
  <xs:sequence>
-  <xs:element name="title" type="title"/>
-  <xs:sequence>
-   <xs:element name="author" type="author"/>
-  </xs:sequence>
+  <xs:element name="title">
+<xs:complexType>
+	<xs:simpleContent>
+		<xs:extension base="titleType">
+			     <xs:attribute name="lang" type="lang" use="required"/>	
+		</xs:extension>
+	</xs:simpleContent>
+</xs:complexType>
+  </xs:element>
+   <xs:element name="author" type="author" minOccurs="1" maxOccurs="10"/>
   <xs:element name="year" type="year"/>
   <xs:element name="price" type="price"/>
  </xs:sequence>
